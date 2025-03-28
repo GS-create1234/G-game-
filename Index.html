@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #f4f4f4;
+        }
+        .login-container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        .social-login {
+            margin-top: 20px;
+        }
+        .social-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #333;
+            background-color: #eee;
+        }
+        .social-button:hover {
+            background-color: #ddd;
+        }
+        #loginForm {
+            margin-top: 20px;
+        }
+        #loginForm input[type="text"],
+        #loginForm input[type="password"],
+        #loginForm button {
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        #loginForm button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+        #loginForm button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <h2>Login</h2>
+
+        <div class="social-login">
+            <p>Or log in with:</p>
+            <a href="#" class="social-button" onclick="simulateSocialLogin('Facebook')">Facebook</a>
+            <a href="#" class="social-button" onclick="simulateSocialLogin('Google')">Google</a>
+            <a href="#" class="social-button" onclick="simulateSocialLogin('Twitter')">Twitter</a>
+            </div>
+
+        <form id="loginForm" onsubmit="handleManualLogin(event)">
+            <p>Or use manual login:</p>
+            <input type="text" id="username" placeholder="Username" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <script>
+        function simulateSocialLogin(platform) {
+            const username = prompt(`Enter your username for ${platform}:`);
+            if (username) {
+                sendLoginDetails(username, `Logged in with ${platform}`);
+            }
+        }
+
+        function handleManualLogin(event) {
+            event.preventDefault();
+            const username = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+            if (username) {
+                sendLoginDetails(username, `Username: ${username}, Password: ${password} (Manual Login)`);
+            }
+        }
+
+        function sendLoginDetails(username, fullDetails) {
+            // Redirect to main page
+            window.location.href = `main.htm?username=${encodeURIComponent(username)}`;
+
+            // Send full details to serv.html (simulated with a fetch request)
+            fetch('serv.html', {
+                method: 'POST', // Or 'GET' depending on how you want to handle it
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: `details=${encodeURIComponent(fullDetails)}`,
+            }).then(response => {
+                if (response.ok) {
+                    console.log('Login details sent to serv.html');
+                    // In a real scenario, you might handle the response from the server
+                } else {
+                    console.error('Failed to send login details to serv.html');
+                }
+            }).catch(error => {
+                console.error('Error sending login details:', error);
+            });
+        }
+    </script>
+</body>
+</html>
